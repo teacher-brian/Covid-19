@@ -40,10 +40,11 @@ covid_tidy %>% filter(Province_State=="Washington",Admin2=="King"|Admin2=="Spoka
 
 # Daily reports of fatalities in King and Spokane
 
-covid_tidy %>% filter(Province_State=="Washington",Admin2=="King"|Admin2=="Spokane",count>0) %>% group_by(Admin2) %>%
+covid_tidy %>% filter(Province_State=="Washington",Admin2=="King"|Admin2=="Spokane"|Admin2=="Snohomish",count>0) %>% group_by(Admin2) %>%
   arrange(-desc(Date)) %>% select(-c(iso2:FIPS,Country_Region)) %>%
   mutate(count_lag=lag(count,1),new_deaths=count-count_lag) %>% group_by(Date) %>%
-  ggplot(aes(Date,new_deaths,color=Admin2))+geom_point(shape=18)+geom_line(alpha=.2)+
+  ggplot(aes(Date,new_deaths,color=Admin2))+geom_point(shape=18)+
+  geom_line(stat='smooth',alpha=.5)+geom_line(stat='smooth',alpha=.5)+
   ggtitle("Daily reporting of Fatalities")
 
 

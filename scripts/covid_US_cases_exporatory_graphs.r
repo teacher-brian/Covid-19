@@ -37,10 +37,10 @@ covid_US_cases_tidy %>% filter(Province_State=="Washington") %>% group_by(Admin2
 
 # total cumulative cases in Washington state, King and Spkane county
 
-covid_US_cases_tidy %>% filter(Province_State=="Washington",Admin2=="King"|Admin2=="Spokane",count>0) %>% group_by(Admin2) %>%
-  arrange(-desc(Date)) %>% select(-c(iso2:FIPS,Country_Region)) %>% group_by(Date) %>%
+covid_US_cases_tidy %>% filter(Province_State=="Washington",Admin2=="King"|Admin2=="Spokane"|Admin2=="Snohomish",count>01) %>% group_by(Admin2) %>%
+  arrange(desc(Date)) %>% select(-c(iso2:FIPS,Country_Region)) %>% group_by(Date)%>%
   ggplot(aes(Date,count,color=Admin2))+geom_point(shape=18)+
-  geom_smooth(se=F)
+  geom_line(stat='smooth',se=F,alpha=.6)
 
 
 covid_US_cases_tidy %>%filter(Province_State=='Washington',count>50) %>%
