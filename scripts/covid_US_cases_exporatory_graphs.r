@@ -51,3 +51,20 @@ covid_US_cases_tidy %>%filter(Province_State=='Washington',count>50) %>%
   geom_point(shape=18)+geom_line(alpha=.2)+geom_smooth(se=F)+
   facet_wrap(~Admin2)
 
+# all us state and then some
+
+covid_US_cases_tidy %>%
+  select(-c(iso2:FIPS,Country_Region)) %>%
+  filter(Date>='2020-04-20',count>1000) %>%
+  group_by(Province_State) %>%
+  mutate(new_cases=count-lag(count)) %>%
+  group_by(Province_State,Date) %>%
+  filter(new_cases>0) %>%
+  summarise(new_cases=sum(new_cases)) %>%
+  filter(new_cases<10000) %>%
+
+ggplot(aes(Date,new_cases))+geom_point(shape=18)+
+    #geom_line(alpha=.2)+
+    geom_smooth(se=F)+
+  facet_wrap(~Province_State)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
