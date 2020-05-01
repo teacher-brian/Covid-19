@@ -52,19 +52,16 @@ covid_US_cases_tidy %>%filter(Province_State=='Washington',count>50) %>%
   facet_wrap(~Admin2)
 
 # all us state and then some
+drop_state <- c("New York","Massachusetts")
 
 covid_US_cases_tidy %>%
-  select(-c(iso2:FIPS,Country_Region)) %>%
-  filter(Date>='2020-04-20') %>%
-  group_by(Province_State) %>%
-  mutate(new_cases=count-lag(count)) %>%
+  select(-c(iso2:FIPS,Admin2,Country_Region)) %>%
   group_by(Province_State,Date) %>%
-  filter(new_cases>0) %>%
-  summarise(new_cases=sum(new_cases)) %>%
-  filter(new_cases<11000) %>%
-
-ggplot(aes(Date,new_cases))+geom_point(shape=18)+
-    #geom_line(alpha=.2)+
-    geom_smooth(se=F)+
+  summarise(count=sum(count,na.rm=T)) %>%
+  filter(Date>"2020-04-20",!Province_State %in% drop_state) %>%
+  mutate(new_cases= count-lag(count)) %>%
+  group_by(Date,Province_State) %>%
+  ggplot(aes(x=Date,new_cases))+ geom_point(size=.2)+
+  geom_line()+
   facet_wrap(~Province_State)+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ggtitle("new cases in the States since 4/21")
