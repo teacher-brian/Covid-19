@@ -1,4 +1,5 @@
-
+library(tidyverse)
+library(lubridate)
 # read US Cases into Rstudio ----------------------------------------------
 
 covid_cases_us <- read.csv(here::here("data","covid_US_cases_raw.csv"),stringsAsFactors = F)

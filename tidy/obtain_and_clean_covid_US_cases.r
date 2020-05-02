@@ -1,7 +1,13 @@
+library(here)
+library(tidyverse)
+
+
 covid_cases_us <- read.csv(file='./COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',stringsAsFactors = F)
+recent_date <- colnames(covid_cases_us)[length(covid_cases_us)]
+#recent_date1 <- colnames(covid_cases_us)[length(covid_cases_us)]
+#if (rescent_date1<=recent_date)
 #write.csv(covid_cases_us,file='./data/covid_US_cases_raw.csv')
 
-recent_date <- colnames(covid_cases_us)[length(covid_cases_us)]
 head(covid_cases_us)
 
 str(covid_cases_us)
