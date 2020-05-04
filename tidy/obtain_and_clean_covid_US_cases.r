@@ -1,5 +1,6 @@
 library(here)
 library(tidyverse)
+library(lubridate)
 
 
 covid_cases_us <- read.csv(file='./COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',stringsAsFactors = F)
