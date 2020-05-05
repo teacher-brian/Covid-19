@@ -47,4 +47,17 @@ covid_tidy %>% filter(Province_State=="Washington",Admin2=="King"|Admin2=="Spoka
   geom_line(stat='smooth',alpha=.5)+geom_line(stat='smooth',alpha=.5)+
   ggtitle("Daily reporting of Fatalities")
 
+drop_state <- c("New York","Massachusetts")
+
+covid_tidy %>%
+  select(-c(iso2:FIPS,Admin2,Country_Region)) %>%
+  group_by(Province_State,Date) %>%
+  summarise(count=sum(count,na.rm=T)) %>%
+  filter(Date>"2020-04-20",!Province_State %in% drop_state) %>%
+  mutate(new_deaths= count-lag(count)) %>%
+  group_by(Date,Province_State) %>%
+  ggplot(aes(x=Date,new_deaths))+ geom_point(size=.2)+
+  geom_line()+
+  facet_wrap(~Province_State)+
+  ggtitle("new cases in the States since 4/21")
 
