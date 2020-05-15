@@ -55,6 +55,8 @@ covid_US_cases_tidy %>%filter(Province_State=='Washington',count>50) %>%
 # all us state and then some
 drop_ship <- c("Diamond Princess","Grand Princess")
 drop_state <- c("New Jersey","New York","Massachusetts","California",)
+protest_states <- c("Minnesota","Texas","Colorado","Michigan","Illinois",
+                    "Wisconsin","Ohio","Mississippi","North Carolina","Alabama","Arizona")
 
 covid_US_cases_tidy %>%
   select(-c(iso2:FIPS,Admin2,Country_Region)) %>%
@@ -62,11 +64,12 @@ covid_US_cases_tidy %>%
   summarise(count=sum(count,na.rm=T)) %>%
   filter(Date>"2020-04-20",!Province_State %in% drop_ship) %>%
   #filter(!Province_State %in% drop_state) %>%
-  mutate(new_cases= count-lag(count)) %>%
+  filter(Province_State %in% protest_states) %>%
+  mutate(new_cases= count-lag(count))%>%
   group_by(Date,Province_State) %>% arrange(desc(Date,new_cases)) %>%
   ggplot(aes(x=Date,new_cases))+ geom_point(size=.2)+
   geom_line()+
   facet_wrap(~Province_State,scales = 'free')+
-  ggtitle("new cases in the States since 4/21")+
+  ggtitle("new cases in the States since 4/21\nBlue simple linear regression, pink with error bars, loess")+
   geom_smooth(method='lm',color='blue',se=F)+
-geom_smooth(color='pink',size=.3)
+geom_smooth(color='pink',size=.6)
