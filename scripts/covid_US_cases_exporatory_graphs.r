@@ -50,7 +50,7 @@ covid_US_cases_tidy %>%filter(Province_State=='Washington',count>50) %>%
   mutate(count_lag=lag(count,1),new_cases=count-count_lag) %>% group_by(Date) %>%
   ggplot(aes(Date,new_cases))+
   geom_point(shape=18)+geom_line(alpha=.2)+geom_smooth(se=F)+
-  facet_wrap(~Admin2)
+  facet_wrap(~Admin2,scale='free')
 
 # all us state and then some
 drop_ship <- c("Diamond Princess","Grand Princess")
@@ -64,7 +64,7 @@ covid_US_cases_tidy %>%
   summarise(count=sum(count,na.rm=T)) %>%
   filter(Date>"2020-04-20",!Province_State %in% drop_ship) %>%
   #filter(!Province_State %in% drop_state) %>%
-  filter(Province_State %in% protest_states) %>%
+  #filter(Province_State %in% protest_states) %>%
   mutate(new_cases= count-lag(count))%>%
   group_by(Date,Province_State) %>% arrange(desc(Date,new_cases)) %>%
   ggplot(aes(x=Date,new_cases))+ geom_point(size=.2)+
