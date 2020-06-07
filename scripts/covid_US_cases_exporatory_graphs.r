@@ -38,19 +38,26 @@ covid_US_cases_tidy %>% filter(Province_State=="Washington") %>% group_by(Admin2
 
 # total cumulative cases in Washington state, King and Spkane county
 
-covid_US_cases_tidy %>% filter(Province_State=="Washington",Admin2=="King"|Admin2=="Spokane"|Admin2=="Snohomish",count>01) %>% group_by(Admin2) %>%
+covid_US_cases_tidy %>% filter(Province_State=="Washington"#,
+                               #Admin2=="King"|
+                                # Admin2=="Spokane"|
+                                 #Admin2=="Snohomish",count>01
+                               ) %>%
+  group_by(Admin2) %>%
   arrange(desc(Date)) %>% select(-c(iso2:FIPS,Country_Region)) %>% group_by(Date)%>%
   ggplot(aes(Date,count,color=Admin2))+geom_point(shape=18)+
   geom_line(stat='smooth',se=F,alpha=.6)
 
+new_cases <- c("Adams",'Benton','Grant', 'Clark', 'Franklin','Skagit','Spokane','Thurston','Walla Walla','Yakima',"King")
 
-covid_US_cases_tidy %>%filter(Province_State=='Washington',count>50) %>%
+covid_US_cases_tidy %>%filter(Province_State=='Washington') %>%
+  filter(Admin2 %in% new_cases) %>%
   group_by(Admin2) %>%
   arrange(-desc(Date)) %>% select(-c(iso2:FIPS,Country_Region)) %>%
   mutate(count_lag=lag(count,1),new_cases=count-count_lag) %>% group_by(Date) %>%
   ggplot(aes(Date,new_cases))+
   geom_point(shape=18)+geom_line(alpha=.2)+geom_smooth(se=F)+
-  facet_wrap(~Admin2,scale='free')
+  facet_wrap(~Admin2)
 
 # all us state and then some
 drop_ship <- c("Diamond Princess","Grand Princess")
