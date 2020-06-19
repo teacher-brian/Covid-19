@@ -27,3 +27,4 @@ covid_tidy[cols] <- lapply(covid_tidy[cols], factor)  ## as.factor() could also 
 covid_tidy$Date<- ymd(covid_tidy$Date)
 str(covid_tidy)
 
+covid_tidy %>% select(d)

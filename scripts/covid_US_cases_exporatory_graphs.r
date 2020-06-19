@@ -50,14 +50,14 @@ covid_US_cases_tidy %>% filter(Province_State=="Washington"#,
 
 new_cases <- c("Adams",'Benton','Grant', 'Clark', 'Franklin','Skagit','Spokane','Thurston','Walla Walla','Yakima',"King")
 
-covid_US_cases_tidy %>%filter(Province_State=='Washington') %>%
-  filter(Admin2 %in% new_cases) %>%
+covid_US_cases_tidy %>%filter(Date>today()-21,Province_State=='Washington') %>%
+  filter(Admin2 == "King" |Admin2 %in% new_cases) %>%
   group_by(Admin2) %>%
   arrange(-desc(Date)) %>% select(-c(iso2:FIPS,Country_Region)) %>%
   mutate(count_lag=lag(count,1),new_cases=count-count_lag) %>% group_by(Date) %>%
   ggplot(aes(Date,new_cases))+
   geom_point(shape=18)+geom_line(alpha=.2)+geom_smooth(se=F)+
-  facet_wrap(~Admin2)
+  facet_wrap(~Admin2,scales = 'free')
 
 # all us state and then some
 drop_ship <- c("Diamond Princess","Grand Princess")
