@@ -74,6 +74,7 @@ covid_US_cases_tidy %>%
   #filter(Province_State %in% protest_states) %>%
   mutate(new_cases= count-lag(count))%>%
   group_by(Date,Province_State) %>% arrange(desc(Date,new_cases)) %>%
+  #mutate(new_case_f=) %>%   # new factor to sort the facets
   ggplot(aes(x=Date,new_cases))+ geom_point(size=.2)+
   geom_line()+
   facet_wrap(~Province_State,scales = 'free')+
