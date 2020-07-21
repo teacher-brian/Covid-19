@@ -50,14 +50,14 @@ cg<- read.csv(here::here('data',file='./covid_global_cases_tidy.csv'),stringsAsF
 cg$Country.Region <- as.factor(cg$Country.Region)
 cg$Province.State <-  factor(cg$Province.State)
 cg$Date <- ymd(cg$Date)
-
+str(cg)
 # total as of today
 
 today <- drop_x(recent_date)
 
 cg %>%
   filter(Date==today) %>%
-  group_by(Date) %>%
+  #group_by(Date) %>%
   summarise(total=sum(count))
 
 # comps
