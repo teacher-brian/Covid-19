@@ -60,7 +60,7 @@ covid_US_cases_tidy %>% filter(Date>today()-21,Province_State=='Washington') %>%
   arrange(desc(Date),desc(new_cases)) %>%
   mutate(sort.Admin2=factor(Admin2))-> wa.new.cases#
 
-wa.new.cases %>%
+#wa.new.cases %>%
 
 
   wa.new.cases[,c(3,12)] <- lapply(wa.new.cases[,c(3,12)],function(x) factor(x))
