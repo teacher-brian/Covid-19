@@ -53,11 +53,11 @@ covid_tidy %>%
   select(-c(iso2:FIPS,Admin2,Country_Region)) %>%
   group_by(Province_State,Date) %>%
   summarise(count=sum(count,na.rm=T)) %>%
-  filter(Date>"2020-04-20",!Province_State %in% drop_state) %>%
+  filter(Date>"2020-04-20") %>% #,!Province_State %in% drop_state) %>%
   mutate(new_deaths= count-lag(count)) %>%
   group_by(Date,Province_State) %>%
   ggplot(aes(x=Date,new_deaths))+ geom_point(size=.2)+
   geom_line()+
-  facet_wrap(~Province_State)+
+  facet_wrap(~Province_State,scales = 'free')+
   ggtitle("new cases in the States since 4/21")
 

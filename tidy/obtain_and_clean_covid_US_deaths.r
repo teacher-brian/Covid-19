@@ -24,7 +24,7 @@ cols<- names(covid_tidy[c(1:8,11)])
 
 #Use lapply() to coerce and replace the chosen columns:
 covid_tidy[cols] <- lapply(covid_tidy[cols], factor)  ## as.factor() could also be used
-covid_tidy$Date<- ymd(covid_tidy$Date)
+covid_tidy$Date<- mdy(covid_tidy$Date)
 str(covid_tidy)
 
 covid_tidy %>% select(d)
