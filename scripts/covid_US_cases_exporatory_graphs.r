@@ -70,7 +70,7 @@ wa.new.cases[,12] <- factor(wa.new.cases$Admin2,levels = wa.new.cases$Admin2[1:4
 wa.new.cases %>%
   ggplot(aes(Date,new_cases))+
   geom_point(shape=18)+geom_line(alpha=.2)+geom_smooth(se=F)+
-  facet_wrap(~sort.Admin2,scales = 'fixed')
+  facet_wrap(~sort.Admin2,scales = 'free')
 
 # all us state and then some
 drop_ship <- c("Diamond Princess","Grand Princess")

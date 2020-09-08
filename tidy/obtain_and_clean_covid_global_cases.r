@@ -105,6 +105,6 @@ cg %>%
   filter(Province.State=="") %>%
   summarise(total=sum(count)) %>%
   arrange(desc(total)) %>%
-   summarise(grand_tot=sum(total)) %>%
+   summarise(grand_tot=sum(total)) %>% arrange(desc(grand_tot)) %>%
    print(.,n=400)
 
