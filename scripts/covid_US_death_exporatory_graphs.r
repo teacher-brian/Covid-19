@@ -59,5 +59,5 @@ covid_tidy %>%
   ggplot(aes(x=Date,new_deaths))+ geom_point(size=.2)+
   geom_line()+
   facet_wrap(~Province_State,scales = 'free')+
-  ggtitle("new cases in the States since 4/21")
+  ggtitle("new deaths in the States since 4/21")
 

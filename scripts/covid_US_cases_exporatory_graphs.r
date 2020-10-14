@@ -100,7 +100,7 @@ covid_US_cases_tidy %>%
     tmp %>%
     ggplot(aes(x=Date,new_cases))+ geom_point(size=.2)+
   geom_line()+
-  facet_wrap(~sort_state,scales = 'free')+
+  facet_wrap(~sort_state,scales = 'fixed')+
   ggtitle("new cases in the States since 4/21\nBlue simple linear regression, pink with , loess")+
   geom_smooth(method='lm',color='blue',se=F)+
 geom_smooth(color='pink',size=.6)
