@@ -52,7 +52,8 @@ covid_US_cases_tidy %>% filter(Province_State=="Washington"#,
 
 new.cases <- c("Adams",'Benton','Grant', 'Clark', 'Franklin','Skagit','Spokane','Thurston','Walla Walla','Yakima',"King")
 
-covid_US_cases_tidy %>% filter(Date>today()-21,Province_State=='Washington') %>%
+covid_US_cases_tidy %>% filter(#Date>today()-21,
+                               Province_State=='Washington') %>%
   #filter(Admin2 == "King" |Admin2 %in% new.cases) %>%
   group_by(Admin2) %>%
   arrange(-desc(Date)) %>% select(-c(iso2:FIPS,Country_Region)) %>%
@@ -60,7 +61,12 @@ covid_US_cases_tidy %>% filter(Date>today()-21,Province_State=='Washington') %>%
   arrange(desc(Date),desc(new_cases)) %>%
   mutate(sort.Admin2=factor(Admin2))-> wa.new.cases#
 
-#wa.new.cases %>%
+
+# The following compares snohomish and king on average weekly new  --------
+
+wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>% mutate(week=week(Date)) %>% group_by(week,Admin2)%>% summarise(mean_new=mean(new_cases,na.rm=T),sum_new=sum(new_cases,na.rm=T)) %>% mutate(d=ymd("2020-01-01")+weeks(week))->weekly_king
+
+wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>% mutate(week=week(Date)) %>% group_by(week,Admin2)%>% ggplot(aes(x=Date,y=new_cases))+geom_point(size=.1) + geom_point(data=weekly_king,aes(x=d,y=mean_new),color='blue', shape=18)+geom_smooth(data=weekly_king,aes(x=d,y=mean_new),color='blue',size=.1)
 
 
   wa.new.cases[,c(3,12)] <- lapply(wa.new.cases[,c(3,12)],function(x) factor(x))
