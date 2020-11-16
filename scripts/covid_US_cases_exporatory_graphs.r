@@ -1,6 +1,7 @@
 library(tidyverse)
 library(lubridate)
 library(forcats)
+library(viridis)
 # read US Cases into Rstudio ----------------------------------------------
 
 covid_cases_us <- read.csv(here::here("data","covid_US_cases_raw.csv"),stringsAsFactors = F)
@@ -66,13 +67,16 @@ covid_US_cases_tidy %>% filter(#Date>today()-21,
 
 wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>% mutate(week=week(Date)) %>% group_by(week,Admin2)%>% summarise(mean_new=mean(new_cases,na.rm=T),sum_new=sum(new_cases,na.rm=T)) %>% mutate(d=ymd("2020-01-01")+weeks(week))->weekly_king
 
-wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>%
+wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases,Date) %>%
   mutate(week=week(Date)) %>%
   group_by(week,Admin2) %>%
   ggplot(aes(x=Date,y=new_cases))+
-  geom_point(size=.1) +
-  geom_point(data=weekly_king,aes(x=d,y=mean_new),color='blue', shape=18)+
-  geom_smooth(data=weekly_king,aes(x=d,y=mean_new),color='blue',size=.1)
+  geom_point(color='magenta',size=.1) +
+    geom_point(data=weekly_king,aes(x=d,y=mean_new),
+             color='royalblue3',
+             shape=18,size=1.5)+
+  geom_smooth(data=weekly_king,aes(x=d,y=mean_new),se = F, color='blue',          size=.1)+
+  ggtitle("King County, WA\npink =  daily cases\n blue =  weekly average")
 
 
   wa.new.cases[,c(3,12)] <- lapply(wa.new.cases[,c(3,12)],function(x) factor(x))
