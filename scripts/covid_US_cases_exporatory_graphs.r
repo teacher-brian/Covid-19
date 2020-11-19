@@ -67,16 +67,30 @@ covid_US_cases_tidy %>% filter(#Date>today()-21,
 
 wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>% mutate(week=week(Date)) %>% group_by(week,Admin2)%>% summarise(mean_new=mean(new_cases,na.rm=T),sum_new=sum(new_cases,na.rm=T)) %>% mutate(d=ymd("2020-01-01")+weeks(week))->weekly_king
 
-wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases,Date) %>%
+wa.new.cases %>% filter(Admin2=="King",Date<=ymd(today())) %>%
+  # consdier changing date filter above
+  select(Admin2,count,count_lag,new_cases,Date) %>%
   mutate(week=week(Date)) %>%
   group_by(week,Admin2) %>%
   ggplot(aes(x=Date,y=new_cases))+
   geom_point(color='magenta',size=.1) +
-    geom_point(data=weekly_king,aes(x=d,y=mean_new),
-             color='royalblue3',
-             shape=18,size=1.5)+
+  # consdier changing date filter below
+    geom_point(data=weekly_king# %>% filter(d<=ymd(today()))
+               ,
+               aes(x=d,y=mean_new),color='royalblue3',shape=18,size=1.5)+
   geom_smooth(data=weekly_king,aes(x=d,y=mean_new),se = F, color='blue',          size=.1)+
-  ggtitle("King County, WA\npink =  daily cases\n blue =  weekly average")
+  ggtitle("King County, WA\npink =  daily cases\n blue =  weekly average")+
+  geom_vline(xintercept=ymd("2020-11-03"))+
+  geom_label(label="election 11/3 --->",
+             x= ymd("2020-10-10"),
+             y = 750
+  )+
+  geom_vline(xintercept=ymd("2020-02-29"))+
+  geom_label(label="<-- first stay at home order",
+             x= ymd("2020-04-01"),
+             y = 750
+  )
+
 
 
   wa.new.cases[,c(3,12)] <- lapply(wa.new.cases[,c(3,12)],function(x) factor(x))
