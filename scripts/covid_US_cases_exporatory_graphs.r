@@ -67,7 +67,9 @@ covid_US_cases_tidy %>% filter(#Date>today()-21,
 
 wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>% mutate(week=week(Date)) %>% group_by(week,Admin2)%>% summarise(mean_new=mean(new_cases,na.rm=T),sum_new=sum(new_cases,na.rm=T)) %>% mutate(d=ymd("2020-01-01")+weeks(week))->weekly_king
 
-wa.new.cases %>% filter(Admin2=="King",Date<=ymd(today())) %>%
+wa.new.cases %>% filter(Admin2=="King",
+                        #Date<=ymd("2020-10-15")
+                        ) %>%
   # consdier changing date filter above
   select(Admin2,count,count_lag,new_cases,Date) %>%
   mutate(week=week(Date)) %>%
