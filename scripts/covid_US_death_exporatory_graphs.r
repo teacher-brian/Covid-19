@@ -36,7 +36,7 @@ covid_tidy %>% filter(Province_State=="Washington") %>% group_by(Admin2) %>%
 covid_tidy %>% filter(Province_State=="Washington",Admin2=="King"|Admin2=="Spokane",count>0) %>% group_by(Admin2) %>%
   arrange(-desc(Date)) %>% select(-c(iso2:FIPS,Country_Region)) %>% group_by(Date) %>%
   ggplot(aes(Date,count,color=Admin2))+geom_point(shape=18)+
-  geom_smooth(se=F)
+  geom_smooth(se=F)+ggtitle("count of Deaths in King and Spokane Counties")
 
 # Daily reports of fatalities in King and Spokane
 

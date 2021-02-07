@@ -63,11 +63,11 @@ cg %>%
 # comps
 
 countries.of.interest <- c('Sweden', 'Korea, South','US',"United Kingdom","France")
-sk.pop <- 51e6
-US.pop <- 330e6
-sw.pop <- 10e6
-uk.pop <- 68e6
-fr.pop <- 65e6
+sk.pop <- 51e6/1e5
+US.pop <- 330e6/1e5
+sw.pop <- 10e6/1e5
+uk.pop <- 68e6/1e5
+fr.pop <- 65e6/1e5
 
 cg %>%
   group_by(Country.Region) %>%
@@ -80,7 +80,8 @@ cg %>%
                               Country.Region=='United Kingdom'~ count/uk.pop
                               )
          ) %>%
-  ggplot(aes(x=Date,proportion))+geom_point(size=.1)+facet_wrap(~Country.Region)
+  ggplot(aes(x=Date,proportion))+geom_point(size=.1)+facet_wrap(~Country.Region,scales = 'free')+
+  ggtitle('cases per 100k') + labs(y='cases per 100k')
 
 # no proport
 cg %>%
