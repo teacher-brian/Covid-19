@@ -65,7 +65,7 @@ covid_US_cases_tidy %>% filter(#Date>today()-21,
 
 # The following compares snohomish and king on average weekly new  --------
 
-wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>% mutate(week=week(Date)) %>% group_by(week,Admin2)%>% summarise(mean_new=mean(new_cases,na.rm=T),sum_new=sum(new_cases,na.rm=T)) %>% mutate(d=ymd("2020-01-01")+weeks(week))->weekly_king
+wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>% mutate(week=week(Date)) %>% group_by(week,Admin2)%>% summarise(mean_new=mean(new_cases,na.rm=T),sum_new=sum(new_cases,na.rm=T)) %>% mutate(d=ymd("2020-01-01")+weeks(week))->weekly_king #because "weeks(week)" probably cycles over, the weekly average stops in jan 2021
 
 wa.new.cases %>% filter(Admin2=="King",
                         #Date<=ymd("2020-10-15")
