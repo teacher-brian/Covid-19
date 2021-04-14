@@ -65,7 +65,14 @@ covid_US_cases_tidy %>% filter(#Date>today()-21,
 
 # The following compares snohomish and king on average weekly new  --------
 
-wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>% mutate(week=week(Date)) %>% group_by(week,Admin2)%>% summarise(mean_new=mean(new_cases,na.rm=T),sum_new=sum(new_cases,na.rm=T)) %>% mutate(d=ymd("2020-01-01")+weeks(week))->weekly_king #because "weeks(week)" probably cycles over, the weekly average stops in jan 2021
+wa.new.cases %>% filter(Admin2=="King") %>% select(Admin2,count,count_lag,new_cases) %>%
+  mutate(week=case_when(Date<="2020-12-31" ~ week(Date),
+                        Date<='2021-12-31' ~ 53 + week(Date))) %>%
+  #print(.,n=500) %>%
+  group_by(week,Admin2) %>%
+  summarise(mean_new=mean(new_cases,na.rm=T),sum_new=sum(new_cases,na.rm=T)) %>%
+  mutate(d=ymd("2020-01-01") + weeks(week))->
+  weekly_king #because "weeks(week)" probably cycles over, the weekly average stops in jan 2021
 
 wa.new.cases %>% filter(Admin2=="King",
                         #Date<=ymd("2020-10-15")
@@ -102,7 +109,7 @@ wa.new.cases[,12] <- factor(wa.new.cases$Admin2,levels = wa.new.cases$Admin2[1:4
 wa.new.cases %>%
   ggplot(aes(Date,new_cases))+
   geom_point(shape=18)+geom_line(alpha=.2)+geom_smooth(se=F)+
-  facet_wrap(~sort.Admin2,scales = 'free')
+  facet_wrap(~sort.Admin2),#scales = 'free')
 
 # all us state and then some
 drop_ship <- c("Diamond Princess","Grand Princess")
